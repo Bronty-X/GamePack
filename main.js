@@ -1,15 +1,18 @@
-const{app, BrowserWindow} = require('electron')
+const{app, BrowserWindow, ipcMain} = require('electron')
+const path = require('node:path')
+
+let mainWindow;
 
 const createWindow = () => {
-    const win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true
+            preload: path.join(__dirname, 'preload.js')
         }
     })
 
-    win.loadFile('index.html')
+    mainWindow.loadFile('src/index.html')
 }
 
 app.whenReady().then(createWindow)
@@ -19,3 +22,8 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 })
+
+
+ipcMain.on('open-game-detail-page', () => {
+    mainWindow.loadFile('src/game-detail.html');
+});
