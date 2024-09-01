@@ -50,6 +50,10 @@ ipcMain.on('open-main-menu', () => {
     mainWindow.loadFile('src/index.html');
 });
 
+ipcMain.on('open-setting', () => {
+    mainWindow.loadFile('src/setting.html');
+})
+
 ipcMain.on('play-game', (event, arg) => {
     const executablePath = 'C:\\Users\\at317\\Downloads\\すがわら\\すがわら\\My project (9).exe';
 
