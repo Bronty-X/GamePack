@@ -25,7 +25,7 @@
         </nav>
         <div class="game-cards-grid">
             <div class="game-card"   v-for="game,index in gameData" >
-                <img class="game-card-img" @click="test()" src="img/NumHuntMenuScreen.png">
+                <img class="game-card-img" @click="getSetting()" src="img/NumHuntMenuScreen.png">
                 <div class="game-card-detail">
                     <h1 class="game-card-title">{{game.title}}</h1>
                     <button class="game-card-playbtn">
@@ -77,7 +77,16 @@
                 },
                 openSetting(){
                     window.electronAPI.openSetting()
+                },
+                getSetting(){
+                    window.electronAPI.getSetting()
+                    console.log(window.electronAPI.getSetting())
                 }
+            },
+            mounted(){
+                window.electronAPI.onLoadSetting((event,data) => {
+                    console.log(data)
+                })
             }
         }).mount('#app')
     </script>

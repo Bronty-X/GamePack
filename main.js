@@ -9,7 +9,7 @@ let mainWindow;
 const fs = require('fs');
 
 const data = { key: 'value' };
-const dataPath = path.join(app.getPath('userData'), 'data.json');
+const dataPath = path.join(app.getPath('userData'), 'setting.json');
 
 console.log(dataPath);
 
@@ -69,4 +69,10 @@ ipcMain.on('play-game', (event, arg) => {
         console.error(`stderr: ${stderr}`);
         mainWindow.show();
     });
+});
+
+ipcMain.on('get-setting', (event, arg) => {
+    const data = JSON.parse(fs.readFileSync(dataPath));
+    event.reply('load-setting', data);
+    console.log(data);
 });
