@@ -1,0 +1,33 @@
+.input-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    max-width: 500px;
+}
+.textinput{
+    padding: 0.5rem 10px;
+    font-weight:300;
+    font-size: 14px;
+    outline: none;
+    border: 1px solid #ccc;
+    color: #fff;
+    background: none;
+    margin-top: 0.5rem;
+   
+}
+label{
+    font-size: 10px;
+    font-weight: 400;
+    margin-top: 1rem;
+}
+textarea{
+    padding: 0.5rem 10px;
+    font-weight:300;
+    font-size: 14px;
+    outline: none;
+    border: 1px solid #ccc;
+    color: #fff;
+    background: none;
+    margin-top: 0.5rem;
+    resize: none;
+}
