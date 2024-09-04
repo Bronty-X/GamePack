@@ -44,6 +44,8 @@
     src: url(../font/NotoSansJP-Thin.ttf);
 }
 body{
+    background-color: #1d1d1d;
     margin: 0;
-    padding: 0;
+    font-family: 'NotoSansJP', sans-serif;
+    color: #fff;
 }

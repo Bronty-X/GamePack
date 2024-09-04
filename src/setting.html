@@ -4,8 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/setting.css">
 </head>
 <body>
-    
+    <div id="app">
+        <div>
+            <h2>ゲーム一覧</h2>
+            <div class="game-cards">
+                <div class="game-card" v-for="game in gameData">
+                    <div class="game-card-img" >
+                        <img src="img/NumHuntMenuScreen.png">
+                        <div class="game-card-overlay">
+                            <div class="game-card-edit-btn">編集</div>
+                            <div class="game-card-delete-btn">削除</div>
+                            
+                        </div>
+                    </div>
+                    <div class="game-card-textarea">
+                        <h3 class="game-card-title">NumHunt </h3>
+                    </div>
+                    
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-addnew-img" >
+                        <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-plus addnew-icon" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                    </div>
+                    <h3>新規追加</h3>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="lib/vue.global.js"></script>
+    <script type="module">
+        const { createApp, ref } = Vue
+        //import testComponent from './components/topGameCard.js'
+
+        createApp({
+            data() {
+                return {
+                    gameData:[
+                        {
+                            title:"NumHunt",
+                            imgSrc:"img/NumHuntMenuScreen.png"
+                        },
+                        {
+                            title:"NumHunt",
+                            imgSrc:"img/NumHuntMenuScreen.png"
+                        },
+                        {
+                            title:"NumHunt",
+                            imgSrc:"img/NumHuntMenuScreen.png"
+                        },
+                        {
+                            title:"NumHunt",
+                            imgSrc:"img/NumHuntMenuScreen.png"
+                        },
+                        {
+                            title:"NumHunt",
+                            imgSrc:"img/NumHuntMenuScreen.png"
+                        }
+                    ],
+                    items: [{ message: 'Foo' }, { message: 'Bar' }]
+                }
+            },
+            methods: {
+                test(){
+                    window.electronAPI.openDetail()
+                },
+                openSetting(){
+                    window.electronAPI.openSetting()
+                }
+            }
+        }).mount('#app')
+    </script>
 </body>
 </html>
