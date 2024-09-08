@@ -9,32 +9,43 @@
 </head>
 <body>
     <div>
-        <div>
-            <div class="input-container">
-                <label  for="gameTitle">ゲームタイトル</label>
-                <input class="textinput" type="text" name="gameTitle">
-            </div>
-            
-            <div class="input-container">
-                <label for="gameDescription">ゲーム説明</label>
-                <textarea name="gameDescription" placeholder="ゲームの説明や、プレイ方法について記述します。" id="gameDescription" cols="30" rows="10"></textarea>
-            </div>
-            <div class="input-container">
-                <label  for="game-developper">開発者名</label>
-                <textarea  type="text" placeholder="例:プログラマー:xx デザイナー:yy" name="game-developper" rows="10"></textarea>
+        <div class="game-info">
+            <div>
+                <div class="game-icon">
+
+                </div>
             </div>
 
             <div class="input-container">
-                <label  for="game-target-platform">対象プラットフォーム</label>
-                <input class="textinput" type="text" placeholder="例:PC,Android" name="game-target-platform">
+            <label for="gameTitle">ゲームタイトル</label>
+            <input class="textinput" type="text" name="gameTitle">
             </div>
             
             <div class="input-container">
-                <label  for="game-technology">開発に用いたゲームエンジン、ツール</label>
-                <input class="textinput" type="text" placeholder="例:Unity,Adobe illustrator" name="game-technology">
+            <label for="gameDescription">ゲーム説明</label>
+            <textarea name="gameDescription" placeholder="ゲームの説明や、プレイ方法について記述します。" id="gameDescription" cols="30" rows="10"></textarea>
+            </div>
+            <div class="input-container">
+            <label for="game-developper">開発者名</label>
+            <textarea type="text" placeholder="例:プログラマー:xx デザイナー:yy" name="game-developper" rows="10"></textarea>
+            </div>
+
+            <div class="input-container">
+            <label for="game-target-platform">対象プラットフォーム</label>
+            <input class="textinput" type="text" placeholder="例:PC,Android" name="game-target-platform">
             </div>
             
+            <div class="input-container">
+            <label for="game-technology">開発に用いたゲームエンジン、ツール</label>
+            <input class="textinput" type="text" placeholder="例:Unity,Adobe illustrator" name="game-technology">
+            </div>
+
+            <div class="input-container">
+            <label for="game-genre">アプリケーションパス</label>
+            <input class="textinput" type="file" placeholder="例:https://www.google.com" name="game-genre">
+            </div>
         </div>
+            
     </div>
 </body>
 </html>
