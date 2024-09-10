@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openSetting: () => ipcRenderer.send('open-setting'),
   playGame: () => ipcRenderer.send('play-game'),
   getSetting: () => ipcRenderer.send('get-setting'), 
+  addNewGameData: (data) => ipcRenderer.send('add-new-game', data),
   //main to renderer
   onLoadSetting: (data) => ipcRenderer.on('load-setting', data),
 })

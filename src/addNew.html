@@ -8,44 +8,121 @@
     <link rel="stylesheet" href="css/addNew.css">
 </head>
 <body>
-    <div>
+    <div id="app">
         <div class="game-info">
+            <form @submit="submitForm">
             <div>
                 <div class="game-icon">
-
+                    {{gameInfo.applicationPath}}
                 </div>
+            </div>
+            <label for="gameThumbnail">サムネイル<span class="required-field-icon">*</span></label>
+            
+            
+            <div class="game-thumbnail">
+                <img :src="gameInfo.thumbnail">
+                <div class="game-thumbnail-overlay">
+                    <div class="edit-thumbnail">
+                        <input class="invisible- input"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
+                        <!--
+                        <svg xmlns="http://www.w3.org/2000/svg"  class="bi bi-pencil-square edit-thumbnail-icon" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                        <span>画像を編集</span>
+                        -->
+                    </div>
+                </div>
+            </div>
+            <div >
+                
             </div>
 
             <div class="input-container">
-            <label for="gameTitle">ゲームタイトル</label>
-            <input class="textinput" type="text" name="gameTitle">
+            <label for="gameTitle">ゲームタイトル<span class="required-field-icon">*</span></label>
+            <input class="textinput" v-model="gameInfo.title" required="true" type="text" name="gameTitle">
             </div>
             
             <div class="input-container">
-            <label for="gameDescription">ゲーム説明</label>
-            <textarea name="gameDescription" placeholder="ゲームの説明や、プレイ方法について記述します。" id="gameDescription" cols="30" rows="10"></textarea>
+            <label for="gameDescription">ゲーム説明<span class="required-field-icon">*</span></label>
+            <textarea name="gameDescription" v-model="gameInfo.description" required="true" placeholder="ゲームの説明や、プレイ方法について記述します。" id="gameDescription" cols="30" rows="10"></textarea>
             </div>
             <div class="input-container">
             <label for="game-developper">開発者名</label>
-            <textarea type="text" placeholder="例:プログラマー:xx デザイナー:yy" name="game-developper" rows="10"></textarea>
+            <textarea type="text" v-model="gameInfo.developper" placeholder="例:プログラマー:xx デザイナー:yy" name="game-developper" rows="10"></textarea>
             </div>
 
             <div class="input-container">
             <label for="game-target-platform">対象プラットフォーム</label>
-            <input class="textinput" type="text" placeholder="例:PC,Android" name="game-target-platform">
+            <input class="textinput" v-model="gameInfo.targetPlatform" type="text" placeholder="例:PC,Android" name="game-target-platform">
             </div>
             
             <div class="input-container">
             <label for="game-technology">開発に用いたゲームエンジン、ツール</label>
-            <input class="textinput" type="text" placeholder="例:Unity,Adobe illustrator" name="game-technology">
+            <input class="textinput" v-model="gameInfo.technology" type="text" placeholder="例:Unity,Adobe illustrator" name="game-technology">
             </div>
 
             <div class="input-container">
-            <label for="game-genre">アプリケーションパス</label>
-            <input class="textinput" type="file" placeholder="例:https://www.google.com" name="game-genre">
+            <label for="game-genre">アプリケーションパス<span class="required-field-icon">*</span></label>
+            <input class="textinput" required="true" v-model="gameInfo.applicationPath" type="text" placeholder="" name="game-genre">
+                
             </div>
+            <button type="submit" class="submit-btn">登録</button>
+            </form>
         </div>
             
     </div>
+    <script src="lib/vue.global.js"></script>
+    <script type="module">
+        const { createApp, ref } = Vue
+        //import testComponent from './components/topGameCard.js'
+
+        createApp({
+            data() {
+                return {
+                    thumbnail:"test",
+                    imageData:null,
+                    addNewMode:false,
+                    gameInfo:{
+                        title:"",
+                        thumbnail:"",
+                        description:"",
+                        developper:"",
+                        targetPlatform:"",
+                        technology:"",
+                        genre:"",
+                        thumbnail:"",
+                        applicationPath:""
+                    }
+                }
+            },
+            methods: {
+                onFileChange(event){
+                    const file = event.target.files[0];  // 選択されたファイルを取得
+
+                    if (file) {
+                        const reader = new FileReader();  // FileReaderオブジェクトを作成
+
+                        // ファイルが読み込まれたときに呼び出される
+                        reader.onload = (e) => {
+                            this.gameInfo.thumbnail = e.target.result;  // Base64形式のデータを格納
+                        };
+
+                        reader.readAsDataURL(file);  // ファイルをBase64に変換
+                    }
+                },
+                submitForm(event){
+                    window.electronAPI.addNewGameData()
+                    window.electronAPI.openSetting()
+                    alert("登録しました")
+                }
+            },
+            mounted(){
+                window.electronAPI.onLoadSetting((event,data) => {
+                    console.log(data)
+                })
+            }
+        }).mount('#app')
+    </script>
 </body>
 </html>

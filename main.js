@@ -2,8 +2,7 @@ const{app, BrowserWindow, ipcMain} = require('electron')
 const path = require('node:path')
 const { execFile } = require('child_process');
 
-
-
+const settingManager = require('./manageSetting.js')
 let mainWindow;
 
 const fs = require('fs');
@@ -29,7 +28,8 @@ const createWindow = () => {
         }
     })
 
-    mainWindow.loadFile('src/index.html')
+    //mainWindow.loadFile('src/index.html')
+    mainWindow.loadFile('src/addNew.html')
 }
 
 app.whenReady().then(createWindow)
@@ -76,3 +76,12 @@ ipcMain.on('get-setting', (event, arg) => {
     event.reply('load-setting', data);
     console.log(data);
 });
+
+ipcMain.on('add-new-game', (event, arg) => {
+    console.log("add-new-game");
+    addNewGameData(arg);
+    settingManager.addNewGameData(arg);
+    console.log(arg);
+    //event.reply('game-added', arg);
+}
+);
