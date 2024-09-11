@@ -9,7 +9,15 @@
 </head>
 <body>
     <div id="app">
+
         <div class="game-info">
+            
+            <div class="back-setting-page" @click="openSettingWithoutSave()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                </svg>
+                設定に戻る
+            </div>
             <form @submit="submitForm">
             <div>
                 <div class="game-icon">
@@ -17,7 +25,7 @@
                 </div>
             </div>
             <label for="gameThumbnail">サムネイル<span class="required-field-icon">*</span></label>
-            
+
             
             <div class="game-thumbnail">
                 <img :src="gameInfo.thumbnail">
@@ -127,6 +135,11 @@
                     window.electronAPI.addNewGameData(testData)
                     window.electronAPI.openSetting()
                     alert("登録しました")
+                },
+                openSettingWithoutSave(){
+                    if(window.confirm("データは保存されていません。本当にページを離れますか？")){
+                        window.electronAPI.openSetting()
+                    }
                 }
             },
             mounted(){

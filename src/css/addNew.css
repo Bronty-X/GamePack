@@ -3,7 +3,7 @@
     width: 1000px;
     margin: 0 auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 .required-field-icon{
@@ -20,7 +20,13 @@
     position: absolute;
     width: 0;
 }
-
+.back-setting-page{
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    width: 600px;
+    margin: 10px 0;
+}
 .game-thumbnail{
     width: 100%;
     height: 300px;
