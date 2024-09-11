@@ -112,7 +112,19 @@
                     }
                 },
                 submitForm(event){
-                    window.electronAPI.addNewGameData()
+                    console.log(this.gameInfo)
+                    const testData ={
+                        title:this.gameInfo.title,
+                        thumbnail:this.gameInfo.thumbnail,
+                        description:this.gameInfo.description,
+                        developper:this.gameInfo.developper,
+                        targetPlatform:this.gameInfo.targetPlatform,
+                        technology:this.gameInfo.technology,
+                        genre:this.gameInfo.genre,
+                        applicationPath:this.gameInfo.applicationPath
+                    }
+                    console.log(typeof this.gameInfo)
+                    window.electronAPI.addNewGameData(testData)
                     window.electronAPI.openSetting()
                     alert("登録しました")
                 }

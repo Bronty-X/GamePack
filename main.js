@@ -7,10 +7,11 @@ let mainWindow;
 
 const fs = require('fs');
 
-const data = { key: 'value' };
-const dataPath = path.join(app.getPath('userData'), 'setting.json');
+/** 
+//const data = { key: 'value' };
+//const dataPath = path.join(app.getPath('userData'), 'setting.json');
 
-console.log(dataPath);
+//console.log(dataPath);
 
 fs.writeFileSync(dataPath, JSON.stringify(data));
 
@@ -18,7 +19,9 @@ if (fs.existsSync(dataPath)) {
     const data = JSON.parse(fs.readFileSync(dataPath));
     console.log(data);
 }
+*/
 
+settingManager.checkSettingFile();
 const createWindow = () => {
     mainWindow = new BrowserWindow({
         width: 800,
@@ -28,8 +31,8 @@ const createWindow = () => {
         }
     })
 
-    //mainWindow.loadFile('src/index.html')
-    mainWindow.loadFile('src/addNew.html')
+    mainWindow.loadFile('src/index.html')
+    //mainWindow.loadFile('src/setting.html')
 }
 
 app.whenReady().then(createWindow)
@@ -72,15 +75,18 @@ ipcMain.on('play-game', (event, arg) => {
 });
 
 ipcMain.on('get-setting', (event, arg) => {
-    const data = JSON.parse(fs.readFileSync(dataPath));
     event.reply('load-setting', data);
     console.log(data);
 });
 
+ipcMain.on('get-game-list', (event, arg) => {
+    event.reply('load-game-list', settingManager.loadGameList());
+});
+
 ipcMain.on('add-new-game', (event, arg) => {
     console.log("add-new-game");
-    addNewGameData(arg);
-    settingManager.addNewGameData(arg);
+    console.log(arg);
+    console.log(settingManager.addNewGameData(arg));
     console.log(arg);
     //event.reply('game-added', arg);
 }

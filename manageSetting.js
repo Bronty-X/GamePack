@@ -20,13 +20,18 @@ function uploadImage(file) {
 }
 
 function addNewGameData(data) {
+  console.log(data)
   if(!fs.existsSync(data.applicationPath)){
+    console.log('Application file not found')
     return {status: 'error', message: 'Application file not found'};
   }
 
   checkSettingFile();
   const setting = JSON.parse(fs.readFileSync(filePath));
   const uuid = require('uuid').v4();
+  
+  console.log( setting.gameList)
+
   setting.gameList.push({...data, id: uuid});
   fs.writeFileSync(filePath, JSON.stringify(setting));
   return {status: 'success', message: 'Game data successfully added'};
@@ -42,4 +47,4 @@ function removeGameData(id){
   fs.writeFileSync(filePath, JSON.stringify(setting));
 }
 
-module.exports = { addNewGameData, loadGameList, removeGameData };
+module.exports = { addNewGameData, loadGameList, removeGameData ,checkSettingFile};

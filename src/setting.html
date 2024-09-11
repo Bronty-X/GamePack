@@ -14,7 +14,7 @@
             <div class="game-cards">
                 <div class="game-card" v-for="game in gameData">
                     <div class="game-card-img" >
-                        <img src="img/NumHuntMenuScreen.png">
+                        <img :src="game.thumbnail">
                         <div class="game-card-overlay">
                             <div class="game-card-edit-btn">編集</div>
                             <div class="game-card-delete-btn">削除</div>
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     <div class="game-card-textarea">
-                        <h3 class="game-card-title">NumHunt </h3>
+                        <h3 class="game-card-title">{{game.title}} </h3>
                     </div>
                     
                 </div>
@@ -48,26 +48,7 @@
             data() {
                 return {
                     gameData:[
-                        {
-                            title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
-                        },
-                        {
-                            title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
-                        },
-                        {
-                            title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
-                        },
-                        {
-                            title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
-                        },
-                        {
-                            title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
-                        }
+
                     ],
                     items: [{ message: 'Foo' }, { message: 'Bar' }]
                 }
@@ -79,6 +60,13 @@
                 openSetting(){
                     window.electronAPI.openSetting()
                 }
+            },
+            mounted(){
+                window.electronAPI.getGameList()
+                window.electronAPI.onLoadGameList((event, data) => {
+                    console.log(data)
+                    this.gameData = data
+                })
             }
         }).mount('#app')
     </script>

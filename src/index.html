@@ -84,8 +84,10 @@
                 }
             },
             mounted(){
-                window.electronAPI.onLoadSetting((event,data) => {
+                //window.electronAPI.getGameList()
+                window.electronAPI.onLoadGameList((event, data) => {
                     console.log(data)
+                    this.gameData = data
                 })
             }
         }).mount('#app')
