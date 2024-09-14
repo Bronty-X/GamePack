@@ -86,10 +86,11 @@ ipcMain.on('get-game-list', (event, arg) => {
     event.reply('load-game-list', settingManager.loadGameList());
 });
 
-ipcMain.on('add-new-game', (event, arg) => {
+ipcMain.on('add-new-game', (event, arg,thumbnail,thumbnailType) => {
     console.log("add-new-game");
-    console.log(arg);
-    console.log(settingManager.addNewGameData(arg));
+    //console.log(arg);
+    console.log(thumbnailType);
+   console.log(settingManager.addNewGameData(arg,thumbnail,thumbnailType));
     console.log(arg);
     //event.reply('game-added', arg);
 }

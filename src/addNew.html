@@ -28,7 +28,7 @@
 
             
             <div class="game-thumbnail">
-                <img :src="gameInfo.thumbnail" v-if="gameInfo.thumbnail">
+                <img :src="imageData" v-if="imageData">
                 <div class="game-thumbnail-overlay">
                     <div class="edit-thumbnail">
                         <input class="invisible- input" required="true"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
@@ -75,6 +75,7 @@
             <input class="textinput" required="true" v-model="gameInfo.applicationPath" type="text" placeholder="" name="game-genre">
                 
             </div>
+            
             <button type="submit" class="submit-btn">登録</button>
             </form>
         </div>
@@ -94,6 +95,7 @@
                     gameInfo:{
                         title:"",
                         thumbnail:"",
+                        thumbnailType:"",
                         description:"",
                         developper:"",
                         targetPlatform:"",
@@ -109,21 +111,33 @@
                     const file = event.target.files[0];  // 選択されたファイルを取得
 
                     if (file) {
-                        const reader = new FileReader();  // FileReaderオブジェクトを作成
-
+                        //const reader = new FileReader();  // FileReaderオブジェクトを作成
+                        const renderBase64 = new FileReader();
+                        const renderBuffer = new FileReader();
                         // ファイルが読み込まれたときに呼び出される
-                        reader.onload = (e) => {
+                        renderBase64.onload = (e) => {
+                            this.imageData = e.target.result;  // Base64形式のデータを格納
+                        };
+                        renderBuffer.onload = (e) => {
                             this.gameInfo.thumbnail = e.target.result;  // Base64形式のデータを格納
                         };
+                        renderBase64.readAsDataURL(file);  // ファイルをBase64に変換
+                        renderBuffer.readAsArrayBuffer(file);
 
-                        reader.readAsDataURL(file);  // ファイルをBase64に変換
+                        const fileName = file.name;
+                        const extension = fileName.split('.').pop();    
+                        this.gameInfo.thumbnailType = extension;
+                        //reader.readAsDataURL(file);  // ファイルをBase64に変換
+                        //reader.readAsArrayBuffer(file);
+
                     }
                 },
                 submitForm(event){
                     console.log(this.gameInfo)
-                    const testData ={
+                    const sendingData ={
                         title:this.gameInfo.title,
-                        thumbnail:this.gameInfo.thumbnail,
+                        //thumbnail:this.gameInfo.thumbnail,
+                        //thumbnailType:this.gameInfo.thumbnailType,
                         description:this.gameInfo.description,
                         developper:this.gameInfo.developper,
                         targetPlatform:this.gameInfo.targetPlatform,
@@ -131,8 +145,11 @@
                         genre:this.gameInfo.genre,
                         applicationPath:this.gameInfo.applicationPath
                     }
-                    console.log(typeof this.gameInfo)
-                    window.electronAPI.addNewGameData(testData)
+
+                    const thumbnail = this.gameInfo.thumbnail
+                    const thumbnailType = this.gameInfo.thumbnailType
+
+                    window.electronAPI.addNewGameData(sendingData,thumbnail,thumbnailType)
                     window.electronAPI.openSetting()
                     alert("登録しました")
                 },
@@ -140,6 +157,11 @@
                     if(window.confirm("データは保存されていません。本当にページを離れますか？")){
                         window.electronAPI.openSetting()
                     }
+                },
+                test(event){
+                    console.log(event.target.files[0])
+                    const file = event.target.files[0];  // 選択されたファイルを取得
+                    console.log(file.path)
                 }
             },
             mounted(){
