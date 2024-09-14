@@ -16,8 +16,8 @@
                     <div class="game-card-img" >
                         <img :src="game.thumbnail">
                         <div class="game-card-overlay">
-                            <div class="game-card-edit-btn">編集</div>
-                            <div class="game-card-delete-btn">削除</div>
+                            <div class="game-card-edit-btn" @click="openEditPage(game.id)">編集</div>
+                            <div class="game-card-delete-btn" @click="deleteGame(game.id)">削除</div>
                             
                         </div>
                     </div>
@@ -62,6 +62,17 @@
                 },
                 openAddPage(){
                     window.electronAPI.openAddPage()
+                },
+                openEditPage(id){
+                    window.electronAPI.openEditPage(id)
+                },
+                deleteGame(id){
+                    if(window.confirm('削除しますか？')){
+                        console.log(id+'を削除')
+                        window.electronAPI.deleteGameData(id)
+                        window.electronAPI.openSetting()
+                        
+                    }
                 }
             },
             mounted(){

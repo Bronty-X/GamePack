@@ -3,7 +3,12 @@ const path = require('node:path')
 const { execFile } = require('child_process');
 
 const settingManager = require('./manageSetting.js')
-let mainWindow;
+var mainWindow;
+
+
+
+var editMode = false;
+var editId = null;
 
 const fs = require('fs');
 
@@ -57,9 +62,14 @@ ipcMain.on('open-setting', () => {
     mainWindow.loadFile('src/setting.html');
 })
 ipcMain.on('open-add-page',()=>{
-    mainWindow.loadFile('src/addNew.html');
+    mainWindow.loadFile('src/edit.html');
+    editMode = false;
 })
-
+ipcMain.on('open-edit-page',(event,id)=>{
+    mainWindow.loadFile('src/edit.html');
+    editMode = true;
+    editId = id;
+})
 ipcMain.on('play-game', (event, arg) => {
     const executablePath = 'C:\\Users\\at317\\Downloads\\すがわら\\すがわら\\My project (9).exe';
 
@@ -95,3 +105,11 @@ ipcMain.on('add-new-game', (event, arg,thumbnail,thumbnailType) => {
     //event.reply('game-added', arg);
 }
 );
+ipcMain.on('delete-game', (event, id) => {
+    settingManager.removeGameData(id);
+    event.reply('game-deleted', id);
+});
+
+ipcMain.on('get-page-mode', (event) => {
+    event.reply('editPage-mode', editMode, editId);
+});

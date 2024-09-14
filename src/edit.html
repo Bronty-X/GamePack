@@ -9,7 +9,7 @@
 </head>
 <body>
     <div id="app">
-
+        <p v-if="editMode">編集モード</p>
         <div class="game-info">
             
             <div class="back-setting-page" @click="openSettingWithoutSave()">
@@ -91,7 +91,7 @@
                 return {
                     thumbnail:"test",
                     imageData:null,
-                    addNewMode:false,
+                    editMode:false,
                     gameInfo:{
                         title:"",
                         thumbnail:"",
@@ -167,6 +167,10 @@
             mounted(){
                 window.electronAPI.onLoadSetting((event,data) => {
                     console.log(data)
+                })
+                window.electronAPI.getPageMode()
+                window.electronAPI.editMode((event,isEditMode,editId) => {
+                    this.editMode = isEditMode
                 })
             }
         }).mount('#app')
