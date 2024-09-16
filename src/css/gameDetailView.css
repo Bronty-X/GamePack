@@ -9,7 +9,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
+
 .go-back-menu{
     display: flex;
     justify-content: flex-start;
@@ -18,7 +20,30 @@
     font-size: 16px;
     cursor: pointer;
 }
+.close-detail-button{
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    fill: #fff;
+    background: #0000009d;
+    border-radius: 50%;
+    transition: fill 0.3s;
+    font-size: 20px;
+    cursor: pointer;
+}.close-detail-button>svg{
+    width: 25px;
+    height: 25px;
+}
+.close-detail-button:hover{
+    fill: #dadada;
+}
 .game-detail{
+    position: relative;
     margin: 0 auto;
     width: 60%;
     max-width: 1000px;
@@ -30,6 +55,16 @@
     flex-direction: column;
     gap: 20px;
     margin-top: 20px;
+    animation: zoomIn 0.3s;
+}
+@keyframes zoomIn{
+    from{
+        transform: scale(0.5);
+    }
+    to{
+        transform: scale(1);
+    }
+    
 }
 .game-detail::-webkit-scrollbar{
     width: 8px;
@@ -37,7 +72,7 @@
     border-radius: 10px;
 }
 .game-detail::-webkit-scrollbar-thumb{
-    background: #fafafa;
+    background: #e9e9e9;
     border-radius: 10px;
 }
 .game-detail-img{
@@ -55,7 +90,7 @@
     color: #fff;
     font-size: 16px;
     font-weight: 300;
-    margin: 0;
+    margin-bottom:50px;
 }
 .game-detail-title{
     color: #fff;
@@ -69,6 +104,7 @@
     font-size: 16px;
     font-weight: 300;
     margin: 0;
+    white-space: pre-line;
 }
 .game-spec-table{
     display: flex;

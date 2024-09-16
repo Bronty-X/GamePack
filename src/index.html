@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/gameDetailView.css">
     <title>Document</title>
 </head>
 <body>
@@ -15,8 +16,9 @@
             <div class="category-index-bar"></div>
         </div>
         -->
+        <game-detail @close-detail-view="closeDetailView()" v-if="detailViewVisible" :title="detailViewData.title" :description="detailViewData.description"  :thumbnail-path="detailViewData.thumbnailPath"></game-detail>
         <nav class="nav-bar">
-            <img class="nav-bar-logo" src="img/CLARKNEXTTokyo-logo-white.svg">
+            <img class="nav-bar-logo" src="img/CLARKNEXTTokyo-logo-white.svg" >
             <div></div>
             <svg @click="openSetting()" xmlns="http://www.w3.org/2000/svg"  fill="#fff" class="bi bi-gear setting-btn" viewBox="0 0 16 16">
                 <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
@@ -24,11 +26,11 @@
             </svg>
         </nav>
         <div class="game-cards-grid">
-            <div class="game-card"   v-for="game,index in gameData" >
-                <img class="game-card-img" @click="getSetting()":src="game.thumbnailPath">
+            <div class="game-card" @click="openDetailView(index)"   v-for="game,index in gameData" >
+                <img class="game-card-img" @click="":src="game.thumbnailPath" >
                 <div class="game-card-detail">
                     <h1 class="game-card-title">{{game.title}}</h1>
-                    <button class="game-card-playbtn">
+                    <button class="game-card-playbtn" @click="playGame(game.id)">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="game-card-playbtn-texture" viewBox="0 0 16 16">
                                 <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
@@ -39,10 +41,11 @@
                 </div>
             </div>
         </div>
-        <test-component></test-component>
+        
     </div>
     
     <script src="js/index.js"></script>
+    <script src="js/detailView.js"></script>
     <script src="lib/vue.global.js"></script>
     <script type="module">
         const { createApp, ref } = Vue
@@ -51,10 +54,13 @@
         createApp({
             data() {
                 return {
+                    test:"test",
+                    detailViewVisible:false,
                     gameData:[
                         {
                             title:"NumHunt",
-                            imgSrc:"img/NumHuntMenuScreen.png"
+                            imgSrc:"img/NumHuntMenuScreen.png",
+                            thumbnailPath:"C:\\Users\\at317\\AppData\\Roaming\\gamepack\\thumbnail\\1f46a954-2896-4fab-bb0d-df3769f9e228.jpg",
                         },
                         {
                             title:"NumHunt",
@@ -69,11 +75,17 @@
                             imgSrc:"img/NumHuntMenuScreen.png"
                         }
                     ],
-                    items: [{ message: 'Foo' }, { message: 'Bar' }]
+                    detailViewData:{
+                        title:"NumHunt",
+                        thumbnailPath:"C:\\Users\\at317\\AppData\\Roaming\\gamepack\\thumbnail\\1f46a954-2896-4fab-bb0d-df3769f9e228.jpg",
+                        
+                        description:"NumHunt is a game that helps you learn numbers"
+                    }
+                    
                 }
             },
             components:{
-                'test-component':TestComponent
+                'game-detail':gameDetailView
             },
             methods: {
                 test(){
@@ -85,7 +97,19 @@
                 getSetting(){
                     window.electronAPI.getSetting()
                     console.log(window.electronAPI.getSetting())
+                },
+                openDetailView(index){
+                    this.detailViewData = this.gameData[index]
+                    console.log(this.detailViewData)
+                    this.detailViewVisible = true
+                },
+                closeDetailView(){
+                    this.detailViewVisible = false
+                },
+                playGame(id){
+                    window.electronAPI.playGame(id)
                 }
+
             },
             mounted(){
                 window.electronAPI.getGameList()
