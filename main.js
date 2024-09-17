@@ -1,4 +1,4 @@
-const{app, BrowserWindow, ipcMain} = require('electron')
+const{app, BrowserWindow, ipcMain,dialog} = require('electron')
 const path = require('node:path')
 const { execFile } = require('child_process');
 
@@ -30,7 +30,7 @@ settingManager.checkSettingFile();
 const createWindow = () => {
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600,
+        height: 600,        
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -69,22 +69,27 @@ ipcMain.on('open-edit-page',(event,id)=>{
     mainWindow.loadFile('src/edit.html');
     editMode = true;
     editId = id;
+    event.reply('load-game-info',settingManager.getGameInfo(id));
 })
-ipcMain.on('play-game', (event, arg) => {
-    const executablePath = 'C:\\Users\\at317\\Downloads\\すがわら\\すがわら\\My project (9).exe';
+ipcMain.on('play-game', (event, id) => {
+    const gameInfo = settingManager.getGameInfo(id);
+    const executablePath = gameInfo.applicationPath;
 
     mainWindow.hide();
 
-    execFile(executablePath, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing file: ${error}`);
-            return;
-        }
+    try {
+        execFile(executablePath, (error, stdout, stderr) => {
+            
 
-        console.log(`stdout: ${stdout}`);
-        console.error(`stderr: ${stderr}`);
+            console.log(`stdout: ${stdout}`);
+            console.error(`stderr: ${stderr}`);
+            mainWindow.show();
+        });
+    } catch (error) {
+        console.error(`Error executing file: ${error}`);
         mainWindow.show();
-    });
+        dialog.showErrorBox('ゲームの起動に失敗しました。', 'エラー内容\n'+error.message);
+    }
 });
 
 ipcMain.on('get-setting', (event, arg) => {
@@ -96,6 +101,8 @@ ipcMain.on('get-game-list', (event, arg) => {
     event.reply('load-game-list', settingManager.loadGameList());
 });
 
+
+
 ipcMain.on('add-new-game', (event, arg,thumbnail,thumbnailType) => {
     console.log("add-new-game");
     //console.log(arg);
@@ -103,8 +110,15 @@ ipcMain.on('add-new-game', (event, arg,thumbnail,thumbnailType) => {
    console.log(settingManager.addNewGameData(arg,thumbnail,thumbnailType));
     console.log(arg);
     //event.reply('game-added', arg);
-}
-);
+});
+ipcMain.on('update-game-data', (event, id, data) => {
+    settingManager.updateGameData(id, data);
+    event.reply('game-updated', id);
+});
+ipcMain.on('update-thumbnail', (event, id, thumbnail, thumbnailType) => {
+    settingManager.changeThumbnail(id, thumbnail, thumbnailType);
+    event.reply('thumbnail-updated', id);
+});
 ipcMain.on('delete-game', (event, id) => {
     settingManager.removeGameData(id);
     event.reply('game-deleted', id);
@@ -112,4 +126,8 @@ ipcMain.on('delete-game', (event, id) => {
 
 ipcMain.on('get-page-mode', (event) => {
     event.reply('editPage-mode', editMode, editId);
+});
+
+ipcMain.on('get-game-info', (event, id) => {
+    event.reply('load-game-info', settingManager.getGameInfo(id));
 });

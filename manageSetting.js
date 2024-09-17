@@ -52,6 +52,44 @@ function addNewGameData(data, thumbnailData, thumbnailType) {
   fs.writeFileSync(filePath, JSON.stringify(setting));
   return {status: 'success', message: 'Game data successfully added'};
 }
+
+function changeThumbnail(id, thumbnailData, thumbnailType){
+  checkSettingFile();
+  const setting = JSON.parse(fs.readFileSync(filePath));
+  const thumbnailPath = path.join(thumbnailDir, `${id}.${thumbnailType}`);
+  fs.writeFileSync(thumbnailPath, Buffer.from(new Uint8Array(thumbnailData)),(err) => {
+    if(err){
+      console.log(err);
+      return {status: 'error', message: 'Failed to save thumbnail'};
+    }
+  });
+  const game = setting.gameList.find((game) => game.id === id);
+  if(game === undefined){
+    return {status: 'error', message: 'Game data not found'};
+  }
+  game.thumbnailPath = thumbnailPath;
+  fs.writeFileSync(filePath, JSON.stringify(setting));
+  return {status: 'success', message: 'Thumbnail successfully changed'};
+
+}
+
+function updateGameData(id, data){
+  checkSettingFile();
+  const setting = JSON.parse(fs.readFileSync(filePath));
+  const game = setting.gameList.find((game) => game.id === id);
+  if(game === undefined){
+    return {status: 'error', message: 'Game data not found'};
+  }
+  Object.assign(game, data);
+
+  setting.gameList = setting.gameList.map((game) => game.id === id ? data : game);
+
+  fs.writeFileSync
+  (filePath, JSON.stringify(setting)); 
+  return {status: 'success', message: 'Game data successfully updated'};
+
+}
+
 function loadGameList(){
   checkSettingFile();
   return JSON.parse(fs.readFileSync(filePath)).gameList;
@@ -63,4 +101,10 @@ function removeGameData(id){
   fs.writeFileSync(filePath, JSON.stringify(setting));
 }
 
-module.exports = { addNewGameData, loadGameList, removeGameData ,checkSettingFile};
+function getGameInfo(id){
+  checkSettingFile();
+  const setting = JSON.parse(fs.readFileSync(filePath));
+  return setting.gameList.find((game) => game.id === id);
+}
+
+module.exports = { addNewGameData,changeThumbnail ,updateGameData, loadGameList, removeGameData ,checkSettingFile,getGameInfo};

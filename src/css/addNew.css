@@ -117,8 +117,14 @@ textarea{
 textarea:active, textarea:focus{
     border: 1px solid #fff;
 }
+.submit-button-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
 .submit-btn{
-    padding: 0.5rem 1rem;
+    padding: 7px 15px;
     font-weight:400;
     font-size: 14px;
     outline: none;
@@ -133,4 +139,11 @@ textarea:active, textarea:focus{
 }
 .submit-btn:hover{
     background: #ffffff;
+}
+.cancel-btn{
+    font-size: 12px;
+    cursor: pointer;
+}
+.cancel-btn:hover{
+    text-decoration: underline;
 }

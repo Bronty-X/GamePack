@@ -21,7 +21,7 @@
             <form @submit="submitForm">
             <div>
                 <div class="game-icon">
-                    {{gameInfo.applicationPath}}
+
                 </div>
             </div>
             <label for="gameThumbnail">サムネイル<span class="required-field-icon">*</span></label>
@@ -29,6 +29,7 @@
             
             <div class="game-thumbnail">
                 <img :src="imageData" v-if="imageData">
+                <img :src="gameInfo.thumbnailPath" v-if="!imageData&&editMode">
                 <div class="game-thumbnail-overlay">
                     <div class="edit-thumbnail">
                         <input class="invisible- input" required="true"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
@@ -75,8 +76,12 @@
             <input class="textinput" required="true" v-model="gameInfo.applicationPath" type="text" placeholder="" name="game-genre">
                 
             </div>
+            <div class="submit-button-container">
+                <button v-if="!editMode" type="submit" class="submit-btn">登録</button>
+                <button v-if="editMode" type="submit" class="submit-btn">更新</button>
+                <span @click="openSettingWithoutSave" class="cancel-btn">キャンセル</span>
+            </div>
             
-            <button type="submit" class="submit-btn">登録</button>
             </form>
         </div>
             
@@ -89,7 +94,7 @@
         createApp({
             data() {
                 return {
-                    thumbnail:"test",
+                    thumbnailChanged:false,
                     imageData:null,
                     editMode:false,
                     gameInfo:{
@@ -129,10 +134,11 @@
                         this.gameInfo.thumbnailType = extension;
                         //reader.readAsDataURL(file);  // ファイルをBase64に変換
                         //reader.readAsArrayBuffer(file);
-
+                        this.thumbnailChanged = true;
                     }
+
                 },
-                submitForm(event){
+                addNewGameData(){
                     console.log(this.gameInfo)
                     const sendingData ={
                         title:this.gameInfo.title,
@@ -153,6 +159,33 @@
                     window.electronAPI.openSetting()
                     alert("登録しました")
                 },
+                updateGameData(){
+                    console.log(this.gameInfo)
+                    const sendingData ={
+                        title:this.gameInfo.title,
+                        description:this.gameInfo.description,
+                        developper:this.gameInfo.developper,
+                        targetPlatform:this.gameInfo.targetPlatform,
+                        technology:this.gameInfo.technology,
+                        genre:this.gameInfo.genre,
+                        applicationPath:this.gameInfo.applicationPath
+                    }
+                },
+                updateThumbnail(){
+                    window.electronAPI.updateThumbnail(this.gameInfo.thumbnail,this.gameInfo.thumbnailType)
+                },
+                submitForm(event){
+                    if(this.editMode){
+                        this.updateGameData()
+                        if(this.thumbnailChanged){
+                            this.updateThumbnail()
+                        }
+                    }else{
+                        this.addNewGameData()
+                    }
+                    console.log(this.gameInfo)
+                    
+                },
                 openSettingWithoutSave(){
                     if(window.confirm("データは保存されていません。本当にページを離れますか？")){
                         window.electronAPI.openSetting()
@@ -171,6 +204,14 @@
                 window.electronAPI.getPageMode()
                 window.electronAPI.editMode((event,isEditMode,editId) => {
                     this.editMode = isEditMode
+                    if(this.editMode){
+                    window.electronAPI.getGameInfo(editId)
+                    }
+                })
+                
+                window.electronAPI.onLoadGameInfo((event,data) => {
+                    console.log(data)
+                    this.gameInfo = data
                 })
             }
         }).mount('#app')
