@@ -20,4 +20,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onLoadGameList: (data) => ipcRenderer.on('load-game-list', data),
   onLoadGameInfo: (data) => ipcRenderer.on('load-game-info', data),
   editMode: (data) => ipcRenderer.on('editPage-mode', data),
+  onGameAdded: (data) => ipcRenderer.on('game-added', data),
+  onGameDeleted: (data) => ipcRenderer.on('game-deleted', data),
+  onGameUpdated: (data) => ipcRenderer.on('game-updated', data),
+  onThumbnailUpdated: (data) => ipcRenderer.on('thumbnail-updated', data),
 })

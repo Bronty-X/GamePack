@@ -32,7 +32,8 @@
                 <img :src="gameInfo.thumbnailPath" v-if="!imageData&&editMode">
                 <div class="game-thumbnail-overlay">
                     <div class="edit-thumbnail">
-                        <input class="invisible- input" required="true"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
+                        <input v-if="!editMode" required="true"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
+                        <input v-if="editMode"  @change="onFileChange"  type="file" name="gameThumbnail" accept="image/*">
                         <!--
                         <svg xmlns="http://www.w3.org/2000/svg"  class="bi bi-pencil-square edit-thumbnail-icon" viewBox="0 0 16 16">
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -170,9 +171,10 @@
                         genre:this.gameInfo.genre,
                         applicationPath:this.gameInfo.applicationPath
                     }
+                    window.electronAPI.updateGameData(this.gameInfo.id,sendingData)
                 },
                 updateThumbnail(){
-                    window.electronAPI.updateThumbnail(this.gameInfo.thumbnail,this.gameInfo.thumbnailType)
+                    window.electronAPI.updateThumbnail(this.gameInfo.id,this.gameInfo.thumbnail,this.gameInfo.thumbnailType)
                 },
                 submitForm(event){
                     if(this.editMode){
@@ -183,7 +185,7 @@
                     }else{
                         this.addNewGameData()
                     }
-                    console.log(this.gameInfo)
+                    window.electronAPI.openSetting()
                     
                 },
                 openSettingWithoutSave(){
@@ -212,6 +214,12 @@
                 window.electronAPI.onLoadGameInfo((event,data) => {
                     console.log(data)
                     this.gameInfo = data
+                })
+                window.electronAPI.onGameUpdated((event,data) => {
+                    window.electronAPI.openSetting()
+                })
+                window.electronAPI.onThumbnailUpdated((event,data) => {
+                    window.electronAPI.openSetting()
                 })
             }
         }).mount('#app')

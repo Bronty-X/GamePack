@@ -82,7 +82,13 @@ function updateGameData(id, data){
   }
   Object.assign(game, data);
 
-  setting.gameList = setting.gameList.map((game) => game.id === id ? data : game);
+  setting.gameList = setting.gameList.map((game) => {
+    if (game.id === id) {
+      return { ...game, ...data, thumbnailPath: game.thumbnailPath };
+    } else {
+      return game;
+    }
+  });
 
   fs.writeFileSync
   (filePath, JSON.stringify(setting)); 
