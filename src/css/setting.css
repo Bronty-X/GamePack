@@ -1,3 +1,55 @@
+.game-list-title{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.drop-down-menu{
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding:3px 10px;
+    font-weight: 300;
+    font-size: 14px;
+}
+.drop-down-btn{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.drop-down-btn svg{
+    width: 14px;
+    fill: #fff;
+}
+.drop-down-selecter{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    
+    top: 100%;
+    left: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    z-index: 100;
+}
+.drop-down-item{
+    cursor: pointer;
+    transition: all 0.1s;
+    border-radius: 5px;
+    padding:7px 15px;
+}
+.drop-down-item:hover{
+    background: #404040;
+}
+.setting-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
 .game-card{
     width: 100%;
     display: flex;

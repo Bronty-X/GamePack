@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('node:path')
-const{app} = require('electron')
+const{app} = require('electron');
+
 
 const filePath = path.join(app.getPath('userData'), 'setting.json');
 
@@ -51,6 +52,27 @@ function addNewGameData(data, thumbnailData, thumbnailType) {
   setting.gameList.push({...data, id: uuid});
   fs.writeFileSync(filePath, JSON.stringify(setting));
   return {status: 'success', message: 'Game data successfully added'};
+}
+function addNewGameFromPackage(packagePath){
+  console.log(packagePath)
+  const setting = JSON.parse(fs.readFileSync(filePath));
+  const packageData = JSON.parse(fs.readFileSync(`${packagePath}/game-pack.json`));
+  const uuid = require('uuid').v4();
+
+  console.log(packageData)
+  
+  try{
+    packageData.gameList.forEach((game) => {
+      const thumbnailPath = path.join(thumbnailDir, `${uuid}.${game.thumbnailType}`);
+      fs.writeFileSync(thumbnailPath, fs.readFileSync(`${packagePath}/${game.thumbnailPath}`));
+      const applicationPath = path.join(packagePath, game.applicationPath);
+      setting.gameList.push({...game, id: uuid, thumbnailPath, applicationPath});
+    });
+  }catch(err){
+    console.log(err);
+    return {status: 'error', message: 'Failed to add game data'};
+  }
+  fs.writeFileSync(filePath, JSON.stringify(setting));
 }
 
 function changeThumbnail(id, thumbnailData, thumbnailType){
@@ -113,4 +135,4 @@ function getGameInfo(id){
   return setting.gameList.find((game) => game.id === id);
 }
 
-module.exports = { addNewGameData,changeThumbnail ,updateGameData, loadGameList, removeGameData ,checkSettingFile,getGameInfo};
+module.exports = { addNewGameData,changeThumbnail ,updateGameData, loadGameList, removeGameData ,checkSettingFile,getGameInfo,addNewGameFromPackage};

@@ -6,15 +6,38 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/selectPackOverlay.css">
 </head>
 <body>
     <div id="app">
-        <div>
-            <h2>ゲーム一覧</h2>
+        <select-pack-overlay v-if="overlayVisible" @close-overlay="closeOverlay" @add-game-from-package="addPackage"></select-pack-overlay>
+        <div class="setting-container">
+            
+            <span @click="backMenu()">メニューに戻る</span>
+            
+            <div class="game-list-title">
+                <h2>ゲーム一覧</h2>
+                <div class="drop-down-menu">
+                    <div  class="drop-down-btn" @click="addNewDrop = !addNewDrop">
+                        ゲームを新規追加
+                        <svg v-if="!addNewDrop" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                        <svg v-if="addNewDrop" style="transform: rotate(180deg)" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+
+                    </div>
+                    <div v-if="addNewDrop" class="drop-down-selecter">
+                        <div class="drop-down-item" @click="openAddPage()">新規追加（通常）</div>
+                        <div class="drop-down-item" @click="openOverlay()">パッケージから一括追加</div>
+                    </div>
+                </div>
+            </div>
             <div class="game-cards">
                 <div class="game-card" v-for="game in gameData">
                     <div class="game-card-img" >
-                        <img :src="game.thumbnail">
+                        <img :src="game.thumbnailPath">
                         <div class="game-card-overlay">
                             <div class="game-card-edit-btn" @click="openEditPage(game.id)">編集</div>
                             <div class="game-card-delete-btn" @click="deleteGame(game.id)">削除</div>
@@ -26,7 +49,7 @@
                     </div>
                     
                 </div>
-
+                <!--
                 <div class="game-card" @click="openAddPage()">
                     <div class="game-card-addnew-img" >
                         <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-plus addnew-icon" viewBox="0 0 16 16">
@@ -35,10 +58,12 @@
                     </div>
                     <h3>新規追加</h3>
                 </div>
+                -->
             </div>
         </div>
         
     </div>
+    <script src="components/selectPackOverlay.js"></script>
     <script src="lib/vue.global.js"></script>
     <script type="module">
         const { createApp, ref } = Vue
@@ -47,11 +72,16 @@
         createApp({
             data() {
                 return {
+                    addNewDrop:false,
+                    overlayVisible:false,
                     gameData:[
 
                     ],
                     items: [{ message: 'Foo' }, { message: 'Bar' }]
                 }
+            },
+            components: {
+                "select-pack-overlay": selectPackOverlay
             },
             methods: {
                 test(){
@@ -73,6 +103,20 @@
                         window.electronAPI.openSetting()
                         
                     }
+                },
+                backMenu(){
+                    window.electronAPI.openMenu()
+                },
+                addPackage(path){
+                    console.log(path)
+                    window.electronAPI.addNewGameFromPackage(path)
+                    window.electronAPI.openSetting()
+                },
+                closeOverlay(){
+                    this.overlayVisible= false
+                },
+                openOverlay(){
+                    this.overlayVisible= true
                 }
             },
             mounted(){
@@ -81,6 +125,14 @@
                     console.log(data)
                     this.gameData = data
                 })
+                window.addEventListener('click', (event) => {
+                    console.log(event)
+                    /**
+                    if(!event.target.classList.contains('drop-down-menu')){
+                        this.addNewDrop = false
+                    }
+                        */
+                })  
             }
         }).mount('#app')
     </script>
