@@ -48,6 +48,20 @@ app.on('window-all-closed', () => {
     }
 })
 
+ipcMain.on('open-file-dialog', (event,property,filter) => {
+    //https://www.electronjs.org/ja/docs/latest/api/dialog
+    dialog.showOpenDialog({
+        properties: property,
+        filters: filter
+    }).then(result => {
+        if (!result.canceled) {
+            event.reply('file-selected', result);
+        }
+    }).catch(err => {
+        console.error(err);
+
+    });
+});
 
 ipcMain.on('open-game-detail-page', () => {
     mainWindow.loadFile('src/game-detail.html');
@@ -110,6 +124,11 @@ ipcMain.on('add-new-game', (event, arg,thumbnail,thumbnailType) => {
    console.log(settingManager.addNewGameData(arg,thumbnail,thumbnailType));
     console.log(arg);
     //event.reply('game-added', arg);
+});
+ipcMain.on('add-new-game-from-package', (event, packagePath) => {
+    settingManager.addNewGameFromPackage(packagePath);
+    console.log(packagePath);
+    event.reply('game-added', packagePath);
 });
 ipcMain.on('update-game-data', (event, id, data) => {
     settingManager.updateGameData(id, data);

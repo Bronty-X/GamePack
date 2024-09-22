@@ -11,10 +11,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getPageMode: () => ipcRenderer.send('get-page-mode'),
   getGameInfo: (id) => ipcRenderer.send('get-game-info', id),
   addNewGameData: (data,thumbnail,thumbnailType) => ipcRenderer.send('add-new-game', data,thumbnail,thumbnailType),
+  addNewGameFromPackage: (packagePath) => ipcRenderer.send('add-new-game-from-package', packagePath),
   deleteGameData: (id) => ipcRenderer.send('delete-game', id),
   getGameList: () => ipcRenderer.send('get-game-list'),
   updateGameData: (id, data) => ipcRenderer.send('update-game-data', id, data),
   updateThumbnail: (id, thumbnail, thumbnailType) => ipcRenderer.send('update-thumbnail', id, thumbnail, thumbnailType),
+  openFileDialog: (property,filter) => ipcRenderer.send('open-file-dialog',property,filter),
   //main to renderer
   onLoadSetting: (data) => ipcRenderer.on('load-setting', data),
   onLoadGameList: (data) => ipcRenderer.on('load-game-list', data),
@@ -24,4 +26,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onGameDeleted: (data) => ipcRenderer.on('game-deleted', data),
   onGameUpdated: (data) => ipcRenderer.on('game-updated', data),
   onThumbnailUpdated: (data) => ipcRenderer.on('thumbnail-updated', data),
+  onFileSelected: (data) => ipcRenderer.on('file-selected', data),
 })
