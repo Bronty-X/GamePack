@@ -25,7 +25,7 @@ if (fs.existsSync(dataPath)) {
     console.log(data);
 }
 */
-
+if (require('electron-squirrel-startup')) app.quit();
 settingManager.checkSettingFile();
 const createWindow = () => {
     mainWindow = new BrowserWindow({
