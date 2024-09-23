@@ -3,7 +3,8 @@ const gameDetailView = {
         'title',
         'description',
         'thumbnailPath',
-        'imgsrc'
+        'imgsrc',
+        'detaildata'
     ],
     methods:{
         closeDetailView(){
@@ -31,33 +32,17 @@ const gameDetailView = {
                     {{description}}
                 </p>
                 <div class="game-spec-table">
-                    <div class="game-spec-table-row">
-                        <div>ジャンル</div>
-                        <div>カードゲーム</div>
+                    <div class="game-spec-table-row" v-if="detaildata.developper">
+                        <p class="game-spec-table-row-label">ディベロップメント</p>
+                        <p class="game-spec-table-row-value">{{detaildata.developper}}</p>
                     </div>
-                    <div class="game-spec-table-row">
-                        <div>プラットフォーム</div>
-                        <div>Web</div>
+                    <div class="game-spec-table-row" v-if="detaildata.targetPlatform">
+                        <p class="game-spec-table-row-label">プラットフォーム</p>
+                        <p class="game-spec-table-row-value">{{detaildata.targetPlatform}}</p>
                     </div>
-                    <div class="game-spec-table-row">
-                        <div>開発期間</div>
-                        <div>3ヶ月</div>
-                    </div>
-                    <div class="game-spec-table-row">
-                        <div>開発言語</div>
-                        <div>JavaScript</div>
-                    </div>
-                    <div class="game-spec-table-row">
-                        <div>開発環境</div>
-                        <div>Unity</div>
-                    </div>
-                    <div class="game-spec-table-row">
-                        <div>開発環境</div>
-                        <div>Unity</div>
-                    </div>
-                    <div class="game-spec-table-row">
-                        <div>開発環境</div>
-                        <div>Unity</div>
+                    <div class="game-spec-table-row" v-if="detaildata.technology">
+                        <p class="game-spec-table-row-label">開発環境</p>
+                        <p class="game-spec-table-row-value">{{detaildata.technology}}</p>
                     </div>
                 </div>
             </div>
