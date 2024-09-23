@@ -24,11 +24,12 @@ function uploadImage(file) {
 
 function addNewGameData(data, thumbnailData, thumbnailType) {
   console.log(data)
+  /** 
   if(!fs.existsSync(data.applicationPath)){
     console.log('Application file not found')
     return {status: 'error', message: 'Application file not found'};
   }
-
+  */
   if(!fs.existsSync(thumbnailDir)){
     fs.mkdirSync(thumbnailDir);
   }
