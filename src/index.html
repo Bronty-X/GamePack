@@ -138,8 +138,9 @@
                 window.electronAPI.onLoadGameList((event, data) => {
                     console.log(data)
                     this.gameData = data
+                    this.changeTopGame()
                 })
-                this.changeTopGame()
+                
             }
             
         }).mount('#app')
