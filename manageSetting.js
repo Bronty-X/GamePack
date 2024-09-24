@@ -58,12 +58,12 @@ function addNewGameFromPackage(packagePath){
   console.log(packagePath)
   const setting = JSON.parse(fs.readFileSync(filePath));
   const packageData = JSON.parse(fs.readFileSync(`${packagePath}/game-pack.json`));
-  const uuid = require('uuid').v4();
+  
 
   console.log(packageData)
-  
   try{
     packageData.gameList.forEach((game) => {
+      const uuid = require('uuid').v4();
       const thumbnailPath = path.join(thumbnailDir, `${uuid}.${game.thumbnailType}`);
       fs.writeFileSync(thumbnailPath, fs.readFileSync(`${packagePath}/${game.thumbnailPath}`));
       const applicationPath = path.join(packagePath, game.applicationPath);
