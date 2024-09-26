@@ -2,6 +2,10 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+  
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,8 +24,8 @@ jobs:
         run: npm run make
       - name: Check directory
         run: ls ./out/make/squirrel.windows/x64
+      - name: Auth with GitHub
+        run: echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
       - name: Deploy
-        run: gh release upload ${{ github.ref_name }} ./out/make/squirrel.windows/x64/* --repo ${{ github.repository }} 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.ref_name }} ./out/make/squirrel.windows/x64/* --repo ${{ github.repository }}  
           
