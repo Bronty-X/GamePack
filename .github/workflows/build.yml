@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: npm run make
       - name: Deploy
-        run: gh release upload ${{ github.ref_name }} --files out/make/squirrel.windows/x64/* --repo ${{ github.repository }} 
+        run: gh release upload ${{ github.ref_name }} out/make/squirrel.windows/x64/* --repo ${{ github.repository }} 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
