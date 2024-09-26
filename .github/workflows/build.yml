@@ -5,6 +5,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -15,6 +18,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run make
+      - name: Check directory
+        run: ls ./out/make/squirrel.windows/x64
       - name: Deploy
         run: gh release upload ${{ github.ref_name }} ./out/make/squirrel.windows/x64/* --repo ${{ github.repository }} 
         env:
